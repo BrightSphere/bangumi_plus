@@ -14,10 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from rest_framework import routers
 
-from bangumi.views import SubjectViewSet, TokenViewSet
+from bangumi.views import SubjectViewSet, TokenViewSet, UserInfoViewSet
 from recommendation.views import RecommendationDetailViewSet, RecommendationViewSet
 
 router = routers.DefaultRouter()
@@ -25,7 +25,9 @@ router.register(r'token', TokenViewSet, base_name="token")
 router.register(r'subjects', SubjectViewSet)
 router.register(r'recommendations', RecommendationViewSet)
 router.register(r'comments', RecommendationDetailViewSet)
+router.register(r'user', UserInfoViewSet, base_name="user")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-] + router.urls
+    path('api/', include(router.urls))
+]

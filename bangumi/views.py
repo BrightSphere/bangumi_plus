@@ -5,9 +5,19 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from bangumi.models import Subject
-from bangumi.serializers import SubjectSerializer
+from bangumi.models import Subject, UserInfo
+from bangumi.serializers import SubjectSerializer, UserInfoSerializer
 from bangumi.services import BangumiService, UserService, RemoteRecommendationService
+
+
+class UserInfoViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        try:
+            return Response(UserInfoSerializer(UserInfo.objects.get(user=request.user)).data)
+        except UserInfo.DoesNotExist:
+            return Response("UserInfo does not exist.", status=status.HTTP_400_BAD_REQUEST)
 
 
 class TokenViewSet(viewsets.ViewSet):
