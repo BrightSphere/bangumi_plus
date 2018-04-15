@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, BasePermission, SAFE_METHODS
@@ -35,7 +36,8 @@ class IsOwnerOrReadOnly(BasePermission):
 class RecommendationDetailViewSet(viewsets.GenericViewSet,
                                   mixins.RetrieveModelMixin,
                                   mixins.UpdateModelMixin,
-                                  mixins.CreateModelMixin):
+                                  mixins.CreateModelMixin,
+                                  mixins.DestroyModelMixin):
     queryset = RecommendationDetail.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = RecommendationDetailSerializer
@@ -48,7 +50,10 @@ class RecommendationDetailViewSet(viewsets.GenericViewSet,
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        try:
+            self.perform_create(serializer)
+        except IntegrityError:
+            return Response({"detail": "Already exist."}, status.HTTP_409_CONFLICT)
         serializer = self.serializer_class(serializer.instance)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

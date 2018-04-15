@@ -58,14 +58,13 @@ class Subject(models.Model):
 
     id = models.IntegerField(primary_key=True)
     type = models.IntegerField(choices=TYPE_CHOICES)
+    name = models.CharField(max_length=255, null=True, default=None, blank=True)
+    name_cn = models.CharField(max_length=255, null=True, default=None, blank=True)
     cover = models.URLField(null=True, default=None, blank=True)
     rank = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
     update_time = models.DateTimeField(auto_now=True)
 
-
-@receiver(post_save, sender=Subject)
-def get_auto_recommendations(sender, instance=None, created=False, **kwargs):
-    if created:
-        from bangumi.services import RemoteRecommendationService
-        RemoteRecommendationService().save_recommendations_by_subject(instance)
+    @property
+    def main_name(self):
+        return self.name_cn if self.name_cn else self.name

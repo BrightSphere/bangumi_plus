@@ -64,6 +64,20 @@ class RemoteService(object):
             raise RuntimeError("{}".format(r))
         return r
 
+    def _get(self, url, **kwargs):
+        kwargs.setdefault("timeout", 5)
+        try:
+            return self.client.get(url, **kwargs)
+        except (TimeoutError, requests.ConnectionError):
+            raise RuntimeError("Failed to reach url[{}]".format(url))
+
+    def _post(self, url, data=None, json=None, **kwargs):
+        kwargs.setdefault("timeout", 5)
+        try:
+            return self.client.post(url, data, json, **kwargs)
+        except (TimeoutError, requests.ConnectionError):
+            raise RuntimeError("Failed to reach url[{}]".format(url))
+
 
 class BangumiOAuthService(RemoteService):
     BASE_URL = "https://bgm.tv/"
@@ -80,19 +94,19 @@ class BangumiOAuthService(RemoteService):
         return params
 
     def obtain_token(self, code):
-        r = self.client.post(self.BASE_URL + self.TOKEN_ENDPOINT,
-                             data=self._get_params({
-                                 "grant_type": "authorization_code",
-                                 "code": code
-                             }))
+        r = self._post(self.BASE_URL + self.TOKEN_ENDPOINT,
+                       data=self._get_params({
+                           "grant_type": "authorization_code",
+                           "code": code
+                       }))
         return self._assert_error(r)
 
     def refresh_token(self, refresh_token):
-        r = self.client.post(self.BASE_URL + self.TOKEN_ENDPOINT,
-                             data=self._get_params({
-                                 "grant_type": "refresh_token",
-                                 "refresh_token": refresh_token
-                             }))
+        r = self._post(self.BASE_URL + self.TOKEN_ENDPOINT,
+                       data=self._get_params({
+                           "grant_type": "refresh_token",
+                           "refresh_token": refresh_token
+                       }))
         return self._assert_error(r)
 
 
@@ -109,13 +123,13 @@ class BangumiService(RemoteService):
             })
 
     def get_user(self, sid):
-        res = self.client.get("{}{}".format(self.BASE_URL + self.USER_ENDPOINT,
-                                            sid))
+        res = self._get("{}{}".format(self.BASE_URL + self.USER_ENDPOINT,
+                                      sid))
         return self._assert_error(res)
 
     def get_subject(self, sid):
-        res = self.client.get("{}{}".format(self.BASE_URL + self.SUBJECT_ENDPOINT,
-                                            sid))
+        res = self._get("{}{}".format(self.BASE_URL + self.SUBJECT_ENDPOINT,
+                                      sid))
         return self._assert_error(res)
 
     def update_or_create_subject(self, sid):
@@ -125,13 +139,18 @@ class BangumiService(RemoteService):
             logger.exception("Failed to get subject from bangumi.")
             subject = dict()
 
-        return Subject.objects.update_or_create(id=int(sid),
-                                                defaults={
-                                                    "type": subject.get("type", Subject.ANIME),
-                                                    "cover": subject.get("images", dict()).get("small", None),
-                                                    "rank": subject.get("rank", 0),
-                                                    "rating": subject.get("rating", dict()).get("score", 0)
-                                                })
+        obj, created = Subject.objects.update_or_create(id=int(sid),
+                                                        defaults={
+                                                            "type": subject.get("type", Subject.ANIME),
+                                                            "cover": subject.get("images", dict()).get("large", None),
+                                                            "rank": subject.get("rank", 0),
+                                                            "rating": subject.get("rating", dict()).get("score", 0),
+                                                            "name": subject.get("name", None),
+                                                            "name_cn": subject.get("name_cn", None)
+                                                        })
+        if created and obj.name:
+            RemoteRecommendationService().save_recommendations_by_subject(obj)
+        return obj, created
 
 
 class RemoteRecommendationService(RemoteService):
@@ -139,8 +158,9 @@ class RemoteRecommendationService(RemoteService):
     RECOMMENDATION_ENDPOINT = "api/search/similarity/"
 
     def get_recommendations_by_subject_id(self, sid):
-        r = self.client.get("{}{}".format(self.BASE_URL + self.RECOMMENDATION_ENDPOINT,
-                                          sid))
+        r = self._get("{}{}".format(self.BASE_URL + self.RECOMMENDATION_ENDPOINT,
+                                    sid))
+
         return self._assert_error(r)
 
     def save_recommendations_by_subject(self, base_subject):

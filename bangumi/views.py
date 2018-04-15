@@ -64,10 +64,13 @@ class SubjectViewSet(viewsets.GenericViewSet,
             obj = get_object_or_404(queryset, **filter_kwargs)
         except Http404 as e:
             pk = filter_kwargs.get("pk", None)
-            if pk is None:
+            try:
+                pk = int(pk)
+                obj, dummy = BangumiService().update_or_create_subject(pk)
+                if obj.name is None:
+                    raise e
+            except (TypeError, ValueError):
                 raise e
-            obj, dummy = BangumiService().update_or_create_subject(pk)
-
         # May raise a permission denied
         self.check_object_permissions(self.request, obj)
 

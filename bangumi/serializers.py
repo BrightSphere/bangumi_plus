@@ -6,15 +6,17 @@ from rest_framework import serializers
 from bangumi.models import Subject, UserInfo
 from recommendation.models import Recommendation
 
+
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInfo
         fields = ('uid', 'username', 'nickname', 'avatar')
 
+
 class BasicSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
-        fields = ('id', 'type', 'cover',
+        fields = ('id', 'type', 'name', 'name_cn', 'main_name', 'cover',
                   'rank', 'rating')
 
 
@@ -49,7 +51,5 @@ class SubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject
-        fields = ('id', 'type', 'cover',
+        fields = ('id', 'type', 'name', 'name_cn', 'main_name', 'cover',
                   'rank', 'rating', 'update_time', 'recommendations')
-
-

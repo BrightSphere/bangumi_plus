@@ -33,6 +33,7 @@ class RecommendationDetailCreateSerializer(serializers.ModelSerializer):
 class RecommendationDetailSerializer(serializers.ModelSerializer):
     user = UserInfoSerializer(read_only=True)
     like_status = serializers.SerializerMethodField()
+    is_author = serializers.SerializerMethodField()
 
     def get_like_status(self, obj):
         if not obj:
@@ -42,13 +43,19 @@ class RecommendationDetailSerializer(serializers.ModelSerializer):
             like_log = LikeLog.objects.get(user=user_info,
                                            recommendation_detail=obj)
             return like_log.score
-        except(AttributeError, UserInfo.DoesNotExist, LikeLog.DoesNotExist):
+        except(AttributeError, TypeError, UserInfo.DoesNotExist, LikeLog.DoesNotExist):
             return 0
+
+    def get_is_author(self, obj):
+        try:
+            return obj.user == UserInfo.objects.get(user=self.context.get("request").user)
+        except (AttributeError, TypeError, UserInfo.DoesNotExist):
+            return False
 
     class Meta:
         model = RecommendationDetail
-        fields = ('id', 'recommendation', 'comment', 'like_count', 'update_time', 'user', 'like_status')
-        read_only_fields = ('id', 'recommendation', 'like_count', 'update_time', 'user', 'like_status')
+        fields = ('id', 'recommendation', 'comment', 'like_count', 'update_time', 'user', 'like_status', 'is_author')
+        read_only_fields = ('id', 'recommendation', 'like_count', 'update_time', 'user', 'like_status', 'is_author')
 
 
 class RecommendationSerializer(serializers.ModelSerializer):
