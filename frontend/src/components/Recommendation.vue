@@ -1,5 +1,5 @@
 <template>
-  <div id="recommendation">
+  <div id="recommendation" v-if="subject_1.id">
 
     <mu-flexbox>
 
@@ -34,6 +34,11 @@
     </mu-card>
     <br/>
     <mu-raised-button v-if="!haveComment" label="创建推荐" :href="createHref" fullWidth primary/>
+  </div>
+  <div v-else>
+    <mu-card class="title-card">
+      <mu-card-title title="载入中..." subTitle="稍等试试"/>
+    </mu-card>
   </div>
 </template>
 
