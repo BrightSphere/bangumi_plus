@@ -11,7 +11,7 @@
     <mu-card>
       <mu-card-title title="推荐的条目"/>
       <div class="gridlist-container">
-        <mu-grid-list class="gridlist-inline">
+        <mu-grid-list id="gridlist-inline">
           <mu-grid-tile
             v-for="recommendation in subject.recommendations"
             :key="recommendation.key"
@@ -90,7 +90,7 @@
     padding: 16px;
   }
 
-  .gridlist-inline {
+  #gridlist-inline {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
