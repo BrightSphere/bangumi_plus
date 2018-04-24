@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         Bangumi Plus
+// @name         Bangumi-Plus
 // @namespace    https://bangumi.brightsphere.xyz/
 // @version      1.0
 // @author       BrightSphere
-// @include     http*://bgm.tv/subject/*
-// @include     http*://bangumi.tv/subject/*
-// @require           https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js
-// @run-at      document-end
-// @grant       GM_xmlhttpRequest
-// @connect    bangumi.brightsphere.xyz
+// @include      http*://bgm.tv/subject/*
+// @include      http*://bangumi.tv/subject/*
+// @require      https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js
+// @run-at       document-end
+// @grant        GM_xmlhttpRequest
+// @connect      bangumi.brightsphere.xyz
 // @encoding     utf-8
 // ==/UserScript==
 
