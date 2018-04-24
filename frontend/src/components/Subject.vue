@@ -92,7 +92,7 @@
 
   .gridlist-inline {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
     overflow-x: auto;
   }
 </style>
