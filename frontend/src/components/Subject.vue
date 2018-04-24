@@ -52,8 +52,7 @@
     },
     created: function () {
       const self = this
-      this.axios.get(`/subjects/${this.$route.params.id}/`,
-        {timeout: 10000})
+      this.axios.get(`/subjects/${this.$route.params.id}/`)
         .then(function (response) {
           console.log('got subject detail!', response)
           self.subject = response.data

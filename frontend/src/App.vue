@@ -40,8 +40,7 @@
         return 'https://bgm.tv/oauth/authorize?client_id=bgm265a93901259d1d&response_type=code'
       }
     },
-    mounted: function () {
-      const self = this
+    created: function () {
       if (this.$store.state.token) {
         this.refreshUser()
       }

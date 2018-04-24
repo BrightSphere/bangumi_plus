@@ -4,7 +4,7 @@ import store from './store/store'
 import router from './router'
 
 // axios 配置
-axios.defaults.timeout = 5000
+axios.defaults.timeout = 20000
 axios.defaults.baseURL = '/api/'
 // axios.defaults.xsrfCookieName = 'csrftoken'
 // axios.defaults.xsrfHeaderName = 'X-CSRFToken'

@@ -14,9 +14,7 @@
       document.title = "授权中..."
       if (this.$route.query.code) {
         this.axios
-          .get(`/token/?code=${this.$route.query.code}`, {
-            timeout: 10000
-          })
+          .get(`/token/?code=${this.$route.query.code}`)
           .then(function (response) {
             console.log(response)
             this.$emit('login', response.data)
