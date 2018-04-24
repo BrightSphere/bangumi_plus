@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bangumi-Plus
 // @namespace    https://bangumi.brightsphere.xyz/
-// @version      1.0
+// @version      1.0.1
 // @author       BrightSphere
 // @include      http*://bgm.tv/subject/*
 // @include      http*://bangumi.tv/subject/*
@@ -38,7 +38,7 @@
         }
         let block = `<div class="subject_section">
 <div class="clearit">
-<div class="rr"><a href="https://bangumi.brightsphere.xyz/subject/${id}" onclick="switchDisplay('new_topic');" class="chiiBtn"><span>关联推荐</span></a></div>
+<div class="rr"><a href="https://bangumi.brightsphere.xyz/subject/${id}" class="chiiBtn"><span>关联推荐</span></a></div>
 <h2 class="subtitle">相关推荐</h2>
 </div>
 <div class="content_inner">
