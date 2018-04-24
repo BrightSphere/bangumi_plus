@@ -34,7 +34,7 @@
         let redirect = this.$store.state.redirect_url
         this.$store.commit('remove')
         this.$router.push({
-          path: redirect
+          path: redirect ? redirect : '/'
         })
       }
     }
