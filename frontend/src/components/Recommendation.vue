@@ -54,6 +54,7 @@
     },
     computed: {
       haveComment: function () {
+        if (!this.$store.state.token) return true
         for( let comment of this.comments){
           if (comment.is_author){
             return true
@@ -79,11 +80,6 @@
         .catch(function (error) {
           console.log(error)
         })
-    },
-    methods: {
-      have_comment(){
-        return 1
-      }
     }
   }
 </script>
