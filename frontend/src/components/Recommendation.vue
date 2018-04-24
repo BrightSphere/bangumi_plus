@@ -4,19 +4,19 @@
     <mu-flexbox>
 
       <mu-flexbox-item>
-        <a :href="'/subject/'+subject_1.id">
+        <router-link :to="'/subject/'+subject_1.id">
         <mu-card>
           <mu-card-title :title="subject_1.main_name" :subTitle="subject_1.name"/>
         </mu-card>
-          </a>
+          </router-link>
       </mu-flexbox-item>
 
       <mu-flexbox-item>
-        <a :href="'/subject/'+subject_2.id">
+        <router-link :to="'/subject/'+subject_2.id">
         <mu-card>
           <mu-card-title :title="subject_2.main_name" :subTitle="subject_2.name"/>
         </mu-card>
-        </a>
+        </router-link>
       </mu-flexbox-item>
 
     </mu-flexbox>
