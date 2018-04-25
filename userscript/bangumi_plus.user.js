@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bangumi-Plus
 // @namespace    https://bangumi.brightsphere.xyz/
-// @version      1.0.1
+// @version      1.0.2
 // @author       BrightSphere
 // @include      http*://bgm.tv/subject/*
 // @include      http*://bangumi.tv/subject/*
@@ -33,7 +33,7 @@
             subjects += `<li>
 <span class="sub">${subtitle}</span>
 <a href="https://bangumi.brightsphere.xyz/recommendation/${rmd.key}" title="查看详情" class="avatar thumbTip"><span class="avatarNeue avatarSize75" style="background-image:url('${subject.cover.replace('http:','')}')"></span></a>
-<a href="/subject/${id}" class="title">${subject.main_name}</a>
+<a href="/subject/${subject.id}" class="title">${subject.main_name}</a>
 </li>`;
         }
         let block = `<div class="subject_section">
