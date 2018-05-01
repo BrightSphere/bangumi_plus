@@ -3,8 +3,7 @@
 // @namespace    https://bangumi.brightsphere.xyz/
 // @version      1.0.2
 // @author       BrightSphere
-// @include      http*://bgm.tv/subject/*
-// @include      http*://bangumi.tv/subject/*
+// @include      /^https?:\/\/(bangumi|bgm|chii)\.(tv|in)\/subject\/\d*$/
 // @require      https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js
 // @run-at       document-end
 // @grant        GM_xmlhttpRequest
